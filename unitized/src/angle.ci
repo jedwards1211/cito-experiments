@@ -1,0 +1,49 @@
+public enum AngleUnit {
+  Degrees,
+  Radians
+}
+
+public class Angle {
+  AngleUnit Unit;
+  double Value;
+
+  public void Set!(double value, AngleUnit unit) {
+    Value = value;
+    Unit = unit;
+  }
+
+  public static Angle# Create(double value, AngleUnit unit) {
+    Angle# angle = new Angle();
+    angle.Set(value, unit);
+    return angle;
+  }
+
+  public static Angle# Degrees(double value) { return Create(value, AngleUnit.Degrees); }
+  public static Angle# Radians(double value) { return Create(value, AngleUnit.Radians); }
+
+  public double ConvertTo(AngleUnit unit) {
+    return Convert(Value, Unit, unit);
+  }
+
+  public double ToDegrees() { return ConvertTo(AngleUnit.Degrees); }
+  public double ToRadians() { return ConvertTo(AngleUnit.Radians); }
+
+  static double Convert(double value, AngleUnit from, AngleUnit to) {
+    if (from == to) return value;
+    return FromBase(ToBase(value, from), to);
+  }
+
+  static double FromBase(double value, AngleUnit to) {
+    switch (to) {
+    case AngleUnit.Degrees: return value * 180 / Math.PI;
+    case AngleUnit.Radians: return value;
+    }
+  }
+
+  static double ToBase(double value, AngleUnit from) {
+    switch (from) {
+    case AngleUnit.Degrees: return value * Math.PI / 180;
+    case AngleUnit.Radians: return value;
+    }
+  }
+}
